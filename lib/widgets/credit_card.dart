@@ -1,11 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:demo_credit_notes/config/assets.dart';
+import 'package:demo_credit_notes/enum/credit_card_type.dart';
 import 'package:demo_credit_notes/model/credit_card_info.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-enum CreditCardType { visa, mastercard }
 
 class CreditCard extends StatelessWidget {
   final CreditCardInfo? info;
@@ -22,19 +21,23 @@ class CreditCard extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            height: MediaQuery.of(context).size.width / 2,
+            height: 200,
             width: MediaQuery.of(context).size.width / 1.2,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: _getRandomAlignment(),
-                end: _getRandomAlignment(),
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
                 colors: [
-                  _getRandomColor(),
-                  _getRandomColor(),
+                  (info?.type == CreditCardType.mastercard)
+                      ? Colors.purple
+                      : Colors.orange,
+                  (info?.type == CreditCardType.mastercard)
+                      ? Colors.blue
+                      : Colors.pink,
                 ],
                 tileMode: TileMode.repeated,
               ),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
             padding: const EdgeInsets.all(32),
             child: Column(
@@ -57,7 +60,7 @@ class CreditCard extends StatelessWidget {
                   style: GoogleFonts.shareTech(
                     textStyle: const TextStyle(
                       color: Colors.white,
-                      fontSize: 28,
+                      fontSize: 24,
                     ),
                   ),
                 ),
@@ -119,27 +122,5 @@ class CreditCard extends StatelessWidget {
       default:
         return "";
     }
-  }
-
-  Color _getRandomColor() {
-    return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-        .withOpacity(1.0);
-  }
-
-  AlignmentGeometry _getRandomAlignment() {
-    final all = [
-      Alignment.topLeft,
-      Alignment.topCenter,
-      Alignment.topRight,
-      Alignment.centerLeft,
-      Alignment.center,
-      Alignment.centerRight,
-      Alignment.bottomLeft,
-      Alignment.bottomCenter,
-      Alignment.bottomRight,
-    ];
-
-    final random = all[(math.Random().nextInt(all.length))];
-    return random;
   }
 }

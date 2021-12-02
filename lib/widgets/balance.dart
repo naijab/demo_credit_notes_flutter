@@ -3,9 +3,13 @@ import 'package:intl/intl.dart';
 
 class Balance extends StatelessWidget {
   static var formatter = NumberFormat('#,##,000');
+  final int usage;
+  final int available;
 
   const Balance({
     Key? key,
+    this.usage = 0,
+    this.available = 0,
   }) : super(key: key);
 
   @override
@@ -26,7 +30,7 @@ class Balance extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               _buildLabel(label: "Usage"),
-              _buildNumber(total: 1000),
+              _buildNumber(total: usage),
             ],
           ),
           const SizedBox(
@@ -36,7 +40,7 @@ class Balance extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               _buildLabel(label: "Available"),
-              _buildNumber(total: 20000),
+              _buildNumber(total: available),
             ],
           ),
         ],
