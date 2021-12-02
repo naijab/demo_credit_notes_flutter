@@ -12,6 +12,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Implement Remove payment history
+    // TODO: Make unit test
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: true,
