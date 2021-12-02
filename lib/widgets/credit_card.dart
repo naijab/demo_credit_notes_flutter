@@ -26,9 +26,12 @@ class CreditCard extends StatelessWidget {
             width: MediaQuery.of(context).size.width / 1.2,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [_getRandomColor(), _getRandomColor()],
+                begin: _getRandomAlignment(),
+                end: _getRandomAlignment(),
+                colors: [
+                  _getRandomColor(),
+                  _getRandomColor(),
+                ],
               ),
               borderRadius: BorderRadius.circular(12),
             ),
@@ -39,14 +42,14 @@ class CreditCard extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Image(
-                    height: 20,
+                    height: (info?.type == CreditCardType.mastercard) ? 30 : 20,
                     image: AssetImage(
                       _getCreditLogo(info?.type ?? CreditCardType.visa),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Text(
                   "${info?.first4digit ?? 0000}  xxxx  xxxx  ${info?.last4digit ?? 0000}",
@@ -120,5 +123,22 @@ class CreditCard extends StatelessWidget {
   Color _getRandomColor() {
     return Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
         .withOpacity(1.0);
+  }
+
+  AlignmentGeometry _getRandomAlignment() {
+    final all = [
+      Alignment.topLeft,
+      Alignment.topCenter,
+      Alignment.topRight,
+      Alignment.centerLeft,
+      Alignment.center,
+      Alignment.centerRight,
+      Alignment.bottomLeft,
+      Alignment.bottomCenter,
+      Alignment.bottomRight,
+    ];
+
+    final random = all[(math.Random().nextInt(all.length))];
+    return random;
   }
 }

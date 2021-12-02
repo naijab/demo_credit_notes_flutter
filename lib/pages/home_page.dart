@@ -56,13 +56,16 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.width / 2,
               width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: mockCreditCard.length,
-                itemBuilder: (ctx, index) {
-                  final info = mockCreditCard[index];
-                  return CreditCard(info: info);
-                },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: mockCreditCard.length,
+                  itemBuilder: (ctx, index) {
+                    final info = mockCreditCard[index];
+                    return CreditCard(info: info);
+                  },
+                ),
               ),
             )
           ],
