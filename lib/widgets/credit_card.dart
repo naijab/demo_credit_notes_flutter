@@ -17,12 +17,12 @@ class CreditCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(8),
+      height: 250,
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.all(16),
       child: Stack(
         children: [
           Container(
-            height: 200,
-            width: MediaQuery.of(context).size.width / 1.2,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.bottomLeft,

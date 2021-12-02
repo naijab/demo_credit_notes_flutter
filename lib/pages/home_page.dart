@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:demo_credit_notes/model/credit_card_info.dart';
 import 'package:demo_credit_notes/view_models/home_page_model.dart';
 import 'package:demo_credit_notes/widgets/balance.dart';
@@ -6,6 +5,7 @@ import 'package:demo_credit_notes/widgets/credit_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _carCarouselController = CarouselController();
+  static var formatter = NumberFormat('#,##,000');
   final _addFormKey = GlobalKey<FormState>();
   final _titleTextController = TextEditingController();
   final _priceTextController = TextEditingController();
@@ -37,12 +37,17 @@ class _HomePageState extends State<HomePage> {
             children: [
               _buildTitle(),
               const SizedBox(
-                height: 20,
+                height: 5,
               ),
-              _buildCardList(viewModel.creditCardList, viewModel),
+              _buildCardList(viewModel),
               const SizedBox(
                 height: 5,
               ),
+              _buildBalance(viewModel),
+              const SizedBox(
+                height: 5,
+              ),
+              _buildPaymentList(viewModel),
             ],
           ),
         ),
@@ -71,27 +76,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCardList(
-      List<CreditCardInfo> creditCards, HomePageViewModel viewModel) {
+  Widget _buildCardList(HomePageViewModel viewModel) {
     return SizedBox(
-      height: 200,
+      height: 250,
       width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: CarouselSlider.builder(
-          itemCount: creditCards.length,
-          itemBuilder: (
-            BuildContext context,
-            int itemIndex,
-            int pageViewIndex,
-          ) {
-            viewModel.currentCardId.update((val) => val = itemIndex);
-            return CreditCard(info: creditCards[itemIndex]);
-          },
-          options: CarouselOptions(
-            height: 200,
-          ),
-        ),
+      child: CreditCard(
+        info: viewModel.creditCard.value,
       ),
     );
   }
@@ -156,7 +146,10 @@ class _HomePageState extends State<HomePage> {
                         title: _titleTextController.text,
                         price: int.tryParse(_priceTextController.text) ?? 0,
                       );
-                      viewModel.add(viewModel.currentCardId.value, payment);
+
+                      viewModel.add(payment);
+                      viewModel.update();
+
                       _addFormKey.currentState?.reset();
                       Navigator.pop(context);
                     }
@@ -171,6 +164,56 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildBalance(HomePageViewModel viewModel) {
+    final item = viewModel.creditCard;
+    return Balance(
+      usage: item.value.usage ?? 0,
+      available: item.value.available ?? 0,
+    );
+  }
+
+  Widget _buildPaymentList(HomePageViewModel viewModel) {
+    final paymentHistories = viewModel.creditCard.value.paymentHistories;
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          16,
+          16,
+          16,
+          70,
+        ),
+        child: ListView.builder(
+          reverse: true,
+          itemCount: paymentHistories?.length ?? 0,
+          itemBuilder: (ctx, index) {
+            final item = paymentHistories?[index];
+            return Column(
+              children: [
+                ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(item?.title ?? ""),
+                      Text(
+                        "฿ ${formatter.format(item?.price ?? 0)}",
+                      ),
+                    ],
+                  ),
+                  subtitle: Text(
+                    DateFormat('dd MMM yy - kk:mm:a').format(
+                      item?.createdAt ?? DateTime.now(),
+                    ),
+                  ),
+                ),
+                const Divider(),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }
