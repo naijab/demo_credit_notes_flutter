@@ -32,6 +32,7 @@ class CreditCard extends StatelessWidget {
                   _getRandomColor(),
                   _getRandomColor(),
                 ],
+                tileMode: TileMode.repeated,
               ),
               borderRadius: BorderRadius.circular(12),
             ),
