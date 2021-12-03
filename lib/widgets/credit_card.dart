@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:demo_credit_notes/config/assets.dart';
 import 'package:demo_credit_notes/enum/credit_card_type.dart';
 import 'package:demo_credit_notes/model/credit_card_info.dart';
@@ -7,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CreditCard extends StatelessWidget {
-  final CreditCardInfo? info;
+  final CreditCardInfo info;
 
   const CreditCard({
     Key? key,
-    this.info,
+    required this.info,
   }) : super(key: key);
 
   @override
@@ -28,10 +26,10 @@ class CreditCard extends StatelessWidget {
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
                 colors: [
-                  (info?.type == CreditCardType.mastercard)
+                  (info.type == CreditCardType.mastercard)
                       ? Colors.purple
                       : Colors.orange,
-                  (info?.type == CreditCardType.mastercard)
+                  (info.type == CreditCardType.mastercard)
                       ? Colors.blue
                       : Colors.pink,
                 ],
@@ -46,9 +44,9 @@ class CreditCard extends StatelessWidget {
                 Container(
                   alignment: Alignment.centerLeft,
                   child: Image(
-                    height: (info?.type == CreditCardType.mastercard) ? 30 : 20,
+                    height: (info.type == CreditCardType.mastercard) ? 30 : 20,
                     image: AssetImage(
-                      _getCreditLogo(info?.type ?? CreditCardType.visa),
+                      _getCreditLogo(info.type ?? CreditCardType.visa),
                     ),
                   ),
                 ),
@@ -56,7 +54,7 @@ class CreditCard extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "${info?.first4digit ?? 0000}  xxxx  xxxx  ${info?.last4digit ?? 0000}",
+                  "${info.first4digit ?? 0000}  xxxx  xxxx  ${info.last4digit ?? 0000}",
                   style: GoogleFonts.shareTech(
                     textStyle: const TextStyle(
                       color: Colors.white,
@@ -65,25 +63,23 @@ class CreditCard extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Card Holder",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                        ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Card Holder",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
                       ),
-                      Text(
-                        info?.name ?? "No Name",
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
+                    ),
+                    Text(
+                      info.name ?? "No Name",
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -101,7 +97,7 @@ class CreditCard extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(8),
               child: Text(
-                info?.bank ?? "No Bank".toUpperCase(),
+                info.bank ?? "No Bank".toUpperCase(),
                 style: const TextStyle(
                   color: Colors.white,
                 ),
