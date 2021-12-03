@@ -2,6 +2,7 @@ import 'package:demo_credit_notes/model/credit_card_info.dart';
 import 'package:demo_credit_notes/view_models/home_page_model.dart';
 import 'package:demo_credit_notes/widgets/balance.dart';
 import 'package:demo_credit_notes/widgets/credit_card.dart';
+import 'package:demo_credit_notes/widgets/payment_history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static var formatter = NumberFormat('#,##,000');
   final _addFormKey = GlobalKey<FormState>();
   final _titleTextController = TextEditingController();
   final _priceTextController = TextEditingController();
@@ -82,6 +82,43 @@ class _HomePageState extends State<HomePage> {
       width: MediaQuery.of(context).size.width,
       child: CreditCard(
         info: viewModel.creditCard.value,
+      ),
+    );
+  }
+
+  Widget _buildBalance(HomePageViewModel viewModel) {
+    final item = viewModel.creditCard;
+    return Balance(
+      usage: item.value.usage ?? 0,
+      available: item.value.available ?? 0,
+    );
+  }
+
+  Widget _buildPaymentList(HomePageViewModel viewModel) {
+    final paymentHistories = viewModel.creditCard.value.paymentHistories;
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          16,
+          16,
+          16,
+          80,
+        ),
+        child: ListView.builder(
+          reverse: true,
+          itemCount: paymentHistories?.length ?? 0,
+          itemBuilder: (ctx, index) {
+            final item = paymentHistories?[index];
+            return PaymentHistoryItem(
+              item: item,
+              removeCallback: () {
+                if (item != null) {
+                  viewModel.remove(item);
+                }
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -164,56 +201,6 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildBalance(HomePageViewModel viewModel) {
-    final item = viewModel.creditCard;
-    return Balance(
-      usage: item.value.usage ?? 0,
-      available: item.value.available ?? 0,
-    );
-  }
-
-  Widget _buildPaymentList(HomePageViewModel viewModel) {
-    final paymentHistories = viewModel.creditCard.value.paymentHistories;
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          16,
-          16,
-          16,
-          70,
-        ),
-        child: ListView.builder(
-          reverse: true,
-          itemCount: paymentHistories?.length ?? 0,
-          itemBuilder: (ctx, index) {
-            final item = paymentHistories?[index];
-            return Column(
-              children: [
-                ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(item?.title ?? ""),
-                      Text(
-                        "฿ ${formatter.format(item?.price ?? 0)}",
-                      ),
-                    ],
-                  ),
-                  subtitle: Text(
-                    DateFormat('dd MMM yy - kk:mm:a').format(
-                      item?.createdAt ?? DateTime.now(),
-                    ),
-                  ),
-                ),
-                const Divider(),
-              ],
-            );
-          },
-        ),
-      ),
     );
   }
 }

@@ -60,7 +60,7 @@ class CreditCard extends StatelessWidget {
                   style: GoogleFonts.shareTech(
                     textStyle: const TextStyle(
                       color: Colors.white,
-                      fontSize: 24,
+                      fontSize: 32,
                     ),
                   ),
                 ),
