@@ -19,19 +19,24 @@ class HomePageViewModel extends GetxController {
 
   void add(CreditCardInfoPaymentHistory payment) {
     creditCard.value.paymentHistories?.add(payment);
+
     creditCard.value.usage =
-        (payment.price ?? 0) + (creditCard.value.usage ?? 0);
+        (creditCard.value.usage ?? 0) + (payment.price ?? 0);
+
     creditCard.value.available =
-        (creditCard.value.available ?? 0) - (creditCard.value.usage ?? 0);
+        (creditCard.value.available ?? 0) - (payment.price ?? 0);
+
     creditCard.refresh();
   }
 
   void remove(CreditCardInfoPaymentHistory payment) {
-    creditCard.value.paymentHistories?.remove(payment);
+    creditCard.value.available =
+        (creditCard.value.available ?? 0) + (payment.price ?? 0);
+
     creditCard.value.usage =
         (creditCard.value.usage ?? 0) - (payment.price ?? 0);
-    creditCard.value.available =
-        (creditCard.value.available ?? 0) + (creditCard.value.usage ?? 0);
+
+    creditCard.value.paymentHistories?.remove(payment);
     creditCard.refresh();
   }
 }

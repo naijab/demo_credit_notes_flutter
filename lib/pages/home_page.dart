@@ -113,6 +113,7 @@ class _HomePageState extends State<HomePage> {
               removeCallback: () {
                 if (item != null) {
                   viewModel.remove(item);
+                  viewModel.update();
                 }
               },
             );

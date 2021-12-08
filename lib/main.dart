@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Make unit test
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: true,

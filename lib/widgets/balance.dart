@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Balance extends StatelessWidget {
-  static var formatter = NumberFormat('#,##,000');
+  static var formatter = NumberFormat('#,##,###');
   final int usage;
   final int available;
 

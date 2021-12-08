@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class PaymentHistoryItem extends StatelessWidget {
-  static var formatter = NumberFormat('#,##,000');
+  static var formatter = NumberFormat('#,##,###');
   final CreditCardInfoPaymentHistory? item;
   final Function removeCallback;
 
