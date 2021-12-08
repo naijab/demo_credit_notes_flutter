@@ -6,6 +6,7 @@ import 'package:demo_credit_notes/widgets/payment_history_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'dart:io' show Platform;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,6 +19,35 @@ class _HomePageState extends State<HomePage> {
   final _addFormKey = GlobalKey<FormState>();
   final _titleTextController = TextEditingController();
   final _priceTextController = TextEditingController();
+
+  static const platform =
+      MethodChannel('com.naijab.DemoCreditNote.demo_credit_notes/version');
+
+  String? _nativeVersion = 'N/A';
+
+  Future<void> _getNativeVersion() async {
+    String? nativeVersion;
+    try {
+      final String? result = await platform.invokeMethod('getNativeVersion');
+      if (result != null) {
+        nativeVersion =
+            'Method Channel: getNativeVersion() \n ${Platform.operatingSystem} version $result';
+      }
+    } on PlatformException catch (e) {
+      print("${e.message}");
+      nativeVersion = 'N/A';
+    }
+
+    setState(() {
+      _nativeVersion = nativeVersion;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => _getNativeVersion());
+  }
 
   @override
   void dispose() {
@@ -34,6 +64,16 @@ class _HomePageState extends State<HomePage> {
         body: SafeArea(
           child: Column(
             children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                _nativeVersion ?? "",
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
               _buildTitle(),
               const SizedBox(
                 height: 5,
@@ -126,11 +166,13 @@ class _HomePageState extends State<HomePage> {
   _paymentForm(BuildContext ctx, HomePageViewModel viewModel) {
     showModalBottomSheet(
       context: ctx,
+      isScrollControlled: true,
       builder: (context) {
         return Form(
           key: _addFormKey,
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
